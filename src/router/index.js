@@ -22,19 +22,45 @@ const routes = [
         name: '用户管理',
         component: ()=> import(/* webpackChunkName: "about" */ '../views/UserView.vue')
       },
+      {
+        path: 'RoleView',
+        name: '角色管理',
+        component: ()=> import(/* webpackChunkName: "about" */ '../views/RoleView.vue')
+      },
+      {
+        path: 'niganma',
+        name: 'niganma管理',
+        component: ()=> import(/* webpackChunkName: "about" */ '../views/niganma.vue')
+      },
+      {
+        path: 'Menu',
+        name: '菜单信息',
+        component: ()=> import(/* webpackChunkName: "about" */ '../views/Menu.vue')
+      },
+      {
+        path: 'Person',
+        name: '个人信息',
+        component: ()=> import(/* webpackChunkName: "about" */ '../views/PersonView.vue')
+      },
+      {
+        path: '/File',
+        name: '文件管理',
+        component: () => import(/* webpackChunkName: "about" */ '../views/File.vue')
+      }
     ]
 
   },
   {
-    path: '/about',
-    name: 'about',
-        component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/Register',
+    name: '注册',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
   },
   {
     path: '/LoginView',
-    name: 'LoginView',
+    name: '登录',
     component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')
-  }
+  },
+
 ]
 
 const router = new VueRouter({

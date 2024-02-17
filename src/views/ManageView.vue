@@ -12,11 +12,11 @@
 
                 <el-header style="border-bottom: 1px solid #ccc">
 
-                <HeaderComponents :collapseBtnClass="collapseBtnClass" :collapse="collapse"></HeaderComponents>
+                <HeaderComponents :collapseBtnClass="collapseBtnClass" :collapse="collapse" :userView="userView"></HeaderComponents>
                 </el-header>
                 <el-main>
 
-                    <router-view>
+                    <router-view @refreshUser="getUser">
 
 
                     </router-view>
@@ -45,13 +45,17 @@ export default {
         return {
             collapseBtnClass :'el-icon-s-unfold',
             sideWidth : 200,
-
-            logoTextShow : true
+            logoTextShow : true,
+            userView:{}
         }
     },
     component: {
        AsideComponents,
         HeaderComponents
+    },
+    created() {
+
+        this.getUser()
     },
     methods: {
        
@@ -68,6 +72,14 @@ export default {
                 this.logoTextShow = true
             }
 
+        },
+        getUser(){
+            let username=localStorage.getItem("userView")?JSON.parse(localStorage.getItem("userView")).username : "12"
+                //后台获取数据
+            this.request.get("/user/username/"+ username).then(res=>{
+               //重新赋值
+                this.userView=res.data
+            })
         }
     }
 };

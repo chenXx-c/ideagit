@@ -54,7 +54,7 @@
                     prop="id" label="ID" width="80">
             </el-table-column>
             <el-table-column
-                    prop="username" label="用户名" width="140">
+                    prop="username" label="用户名123" width="140">
             </el-table-column>
             <el-table-column
                     prop="nickname" label="昵称" width="120">
@@ -142,7 +142,7 @@
 
 <script>
 export default {
-    name: "UserView",
+
     data() {
         return {
             tableData: [],

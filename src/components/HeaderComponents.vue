@@ -15,12 +15,22 @@
 
         </div>
 
-        <el-dropdown style="width: 70px;cursor: pointer">
-            <span>czc</span>
-            <i class="el-icon-arrow-down" style="margin-left: 5px"></i>
+        <el-dropdown style="width: 100px;cursor: pointer;text-align:right ">
+            <div style="display: inline-block">
+
+                <img :src="userView.avatar"
+                     alt=""
+                style="width: 30px;border-radius: 50%;position: relative;top: 10px;right: 5px">
+            <span >{{ userView.nickname }}</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
+
+            </div>
             <el-dropdown-menu slot="dropdown" style="width: 100px;text-align: center">
-                <el-dropdown-item style="font-size: 14px;padding: 5px 0">个人信息</el-dropdown-item>
-                <el-dropdown-item style="font-size: 14px">退出</el-dropdown-item>
+                <router-link to="/Person" style="font-size: 14px;padding: 5px 0;text-decoration: none">个人信息</router-link>
+                <el-dropdown-item  style="font-size: 14px;padding: 5px 0">
+                <router-link to="/loginView" style="font-size: 14px">登录</router-link>
+
+                <span style="text-decoration: none" @click="logout">退出</span>
+                </el-dropdown-item>
 
             </el-dropdown-menu>
         </el-dropdown>
@@ -28,20 +38,34 @@
 </template>
 
 <script>
+
 export default {
     name: "HeaderComponents",
     props: {
         collapseBtnClass: String,
-        collapse: Boolean
+        collapse: Boolean,
+        userView: Object
     },
     computed: {
         currentPathName() {
             return this.$store.state.currentPathName;
         }
     },
+    data(){
+        return{
+        //    userView:localStorage.getItem("userView")?JSON.parse(localStorage.getItem("userView")):{}
+        }
+    },
     watch: {
         currentPathName(newVal) {
             console.log(newVal)
+        }
+    },
+    methods: {
+        logout() {
+            this.$router.push("/loginView")
+            localStorage.removeItem("userView")
+            this.$message.success("退出成功")
         }
     }
 

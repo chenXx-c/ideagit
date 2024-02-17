@@ -26,62 +26,45 @@
                 title="你确定删除吗？"
                 @confirm="delBatch">
 
-            <el-button slot="reference" type="danger">批量删除<i class="el-icon-remove-outline"></i>
-            </el-button>
+                <el-button slot="reference" type="danger">批量删除<i class="el-icon-remove-outline"></i>
+                </el-button>
             </el-popconfirm>
 
-            <el-upload
-                action="https://localhost:8081/user/import"
-                style="display: inline-block" :show-file-list="false" accept="xlsx"
-                :on-success="handleExcelImport">
-
-            <el-button class="ml-5" type="primary">导入<i class="el-icon-bottom"></i></el-button>
-            </el-upload>
-
-            <el-button class="ml-5" type="danger">导出<i class="el-icon-top"></i></el-button>
-        </div>
+  </div>
 
 
         <el-table :data="tableData" border stripe:header-cell-name="headerBg" @selection-change="handleSelectionChange">
             <!--                           批量的按钮-->
 
             <el-table-column
-                    type="selection"
-                    width="55">
+                type="selection"
+                width="55">
             </el-table-column>
 
             <el-table-column
-                    prop="id" label="ID" width="80">
+                prop="username" label="名称">
             </el-table-column>
             <el-table-column
-                    prop="username" label="用户名" width="140">
+                prop="description" label="描述" >
             </el-table-column>
+
             <el-table-column
-                    prop="nickname" label="昵称" width="120">
-            </el-table-column>
-            <el-table-column
-                    prop="email" label="邮箱">
-            </el-table-column>
-            <el-table-column
-                    prop="phone" label="电话">
-            </el-table-column>
-            <el-table-column
-                    prop="address" label="地址">
-            </el-table-column>
-            <el-table-column
-                    lable="操作" width="200" align="center">
+                lable="操作" width="280" align="center">
 
                 <template slot-scope="scope">
-                    <el-button type="success" @click="handleEit(scope.row)">编辑</el-button>
+
+                    <el-button type="info" slot="reference">分配菜单<i class="el-icon-menu"></i></el-button>
+
+                    <el-button type="success" @click="handleEit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
                     <el-popconfirm
-                            class="ml-5"
-                            confirm-button-text='好的'
-                            cancel-button-text='不用了'
-                            icon="el-icon-info"
-                            icon-color="red"
-                            title="你确定删除吗？"
-                            @confirm="del(scope.row.id)"
+                        class="ml-5"
+                        confirm-button-text='好的'
+                        cancel-button-text='不用了'
+                        icon="el-icon-info"
+                        icon-color="red"
+                        title="你确定删除吗？"
+                        @confirm="del(scope.row.id)"
                     >
                         <el-button slot="reference" type="danger">删除</el-button>
 
@@ -91,42 +74,46 @@
             </el-table-column>
         </el-table>
 
-          <div style="padding: 10px 0">
+        <div style="padding: 10px 0">
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="pageNum"
-                    :page-sizes="[2, 5, 10, 20]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pageNum"
+                :page-sizes="[2, 5, 10, 20]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
             </el-pagination>
 
 
-          </div>
-<!--       弹窗填写信息-->
+        </div>
+        <!--       弹窗填写信息-->
         <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="30%">
             <el-form label-width="80px" size="small">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item label="名称" :label-width="formLabelWidth">
                     <el-input v-model="form.username" autocomplete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item label="昵称" :label-width="formLabelWidth">
-                    <el-input v-model="form.nickname" autocomplete="off"></el-input>
+                <el-form-item label="描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.description" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="save">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <!--       弹窗菜单分配-->
+        <el-dialog title="菜单分配" :visible.sync="MenuDialogFormVisible" width="30%">
+            <el-form label-width="80px" size="small">
+                <el-form-item label="名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.username" autocomplete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item label="邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.email" autocomplete="off"></el-input>
+                <el-form-item label="描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.description" autocomplete="off"></el-input>
                 </el-form-item>
-
-                <el-form-item label="电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.phone" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="地址" :label-width="formLabelWidth">
-                    <el-input v-model="form.address" autocomplete="off"></el-input>
-                </el-form-item>
-
-
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -142,7 +129,7 @@
 
 <script>
 export default {
-    name: "UserView",
+
     data() {
         return {
             tableData: [],
@@ -159,6 +146,7 @@ export default {
             logoTextShow: true,
             headerBg: 'headerBg',
             dialogFormVisible: false,
+            MenuDialogFormVisible:false,
             multipleSelection: [],
 
         }
@@ -169,7 +157,7 @@ export default {
     },
     methods: {
         load() {
-            this.request.get("/user/page", {
+            this.request.get("/role/page", {
                 params: {
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
@@ -209,7 +197,7 @@ export default {
             this.form = {}
         },
         save() {
-            this.request.post("/user", this.form).then(res => {
+            this.request.post("/role", this.form).then(res => {
                 if (res.data) {
                     this.$message.success("保存成功")
                     this.dialogFormVisible = false
@@ -227,7 +215,7 @@ export default {
         },
         //删除
         del(id) {
-            this.request.delete("/user/" + id).then(res => {
+            this.request.delete("/role/" + id).then(res => {
                 if (res.data) {
                     this.$message.success("删除成功")
                     this.load()
@@ -239,7 +227,7 @@ export default {
         //批量删除
         delBatch() {
             let ids = this.multipleSelection.map(v => v.id)
-            this.request.post("/user/del/batch/", ids).then(res => {
+            this.request.post("/role/del/batch/", ids).then(res => {
                 if (res.data) {
                     this.$message.success("批量删除成功")
                     this.load()
@@ -253,7 +241,7 @@ export default {
             this.multipleSelection = val
         },
         handleExcelImport(){
-           this.$message.success("导入成功")//弹窗
+            this.$message.success("导入成功")//弹窗
             this.load()
         }
     }
