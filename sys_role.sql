@@ -1,0 +1,1 @@
+INSERT INTO `sys_role` (`id`, `username`, `password`, `nickname`, `email`, `phone`, `address`, `create_time`, `avatar`, `description`) VALUES (140, 'admin', NULL, NULL, NULL, NULL, NULL, '2024-02-07 15:25:57', NULL, '管理员');
