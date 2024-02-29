@@ -18,53 +18,54 @@
         <div style="margin: 10px 0">
             <el-button type="primary" @click="handleAdd">新增<i class="el-icon-circle-plus-outline"></i></el-button>
             <el-popconfirm
-                class="ml-5"
-                confirm-button-text='好的'
-                cancel-button-text='不用了'
-                icon="el-icon-info"
-                icon-color="red"
-                title="你确定删除吗？"
-                @confirm="delBatch">
+                    class="ml-5"
+                    confirm-button-text='好的'
+                    cancel-button-text='不用了'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    title="你确定删除吗？"
+                    @confirm="delBatch">
 
                 <el-button slot="reference" type="danger">批量删除<i class="el-icon-remove-outline"></i>
                 </el-button>
             </el-popconfirm>
 
-  </div>
+        </div>
 
 
         <el-table :data="tableData" border stripe:header-cell-name="headerBg" @selection-change="handleSelectionChange">
             <!--                           批量的按钮-->
 
             <el-table-column
-                type="selection"
-                width="55">
+                    type="selection"
+                    width="55">
             </el-table-column>
 
             <el-table-column
-                prop="username" label="名称">
+                    prop="username" label="名称">
             </el-table-column>
             <el-table-column
-                prop="description" label="描述" >
+                    prop="description" label="描述">
             </el-table-column>
 
             <el-table-column
-                lable="操作" width="280" align="center">
+                    lable="操作" width="280" align="center">
 
                 <template slot-scope="scope">
 
-                    <el-button type="info" slot="reference">分配菜单<i class="el-icon-menu"></i></el-button>
+                    <el-button type="info" slot="reference" @click="AssignRoles(scope.row)">菜单分配<i
+                            class="el-icon-menu"></i></el-button>
 
                     <el-button type="success" @click="handleEit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
                     <el-popconfirm
-                        class="ml-5"
-                        confirm-button-text='好的'
-                        cancel-button-text='不用了'
-                        icon="el-icon-info"
-                        icon-color="red"
-                        title="你确定删除吗？"
-                        @confirm="del(scope.row.id)"
+                            class="ml-5"
+                            confirm-button-text='好的'
+                            cancel-button-text='不用了'
+                            icon="el-icon-info"
+                            icon-color="red"
+                            title="你确定删除吗？"
+                            @confirm="del(scope.row.id)"
                     >
                         <el-button slot="reference" type="danger">删除</el-button>
 
@@ -76,19 +77,19 @@
 
         <div style="padding: 10px 0">
             <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="pageNum"
-                :page-sizes="[2, 5, 10, 20]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageNum"
+                    :page-sizes="[2, 5, 10, 20]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
             </el-pagination>
 
 
         </div>
         <!--       弹窗填写信息-->
-        <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="30%">
+        <el-dialog title="用户信息1" :visible.sync="dialogFormVisible" width="30%">
             <el-form label-width="80px" size="small">
                 <el-form-item label="名称" :label-width="formLabelWidth">
                     <el-input v-model="form.username" autocomplete="off"></el-input>
@@ -105,18 +106,31 @@
         </el-dialog>
 
         <!--       弹窗菜单分配-->
-        <el-dialog title="菜单分配" :visible.sync="MenuDialogFormVisible" width="30%">
-            <el-form label-width="80px" size="small">
-                <el-form-item label="名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.username" autocomplete="off"></el-input>
-                </el-form-item>
+        <el-dialog title="菜单分配" :visible.sync="MenuDialogFormVisible" width="30%" style="padding: 0 20px">
+            <!--            <el-form label-width="80px" size="small">-->
+            <!--                <el-form-item label="名称" :label-width="formLabelWidth">-->
+            <!--                    <el-input v-model="form.username" autocomplete="off"></el-input>-->
+            <!--                </el-form-item>-->
 
-                <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input v-model="form.description" autocomplete="off"></el-input>
-                </el-form-item>
-            </el-form>
+            <!--                <el-form-item label="描述" :label-width="formLabelWidth">-->
+            <!--                    <el-input v-model="form.description" autocomplete="off"></el-input>-->
+            <!--                </el-form-item>-->
+            <!--            </el-form>-->
+            <!--            <div slot="footer" class="dialog-footer">-->
+            <!--                <el-button @click="MenuDialogFormVisible = false">取 消</el-button>-->
+            <!--                <el-button type="primary" @click="save">确 定</el-button>-->
+            <!--            </div>-->
+            <el-tree
+                     :data="menuData"
+                     show-checkbox
+                     node-key="id"
+                     :default-expanded-keys="[2]"
+                     :default-checked-keys="[4]"
+                     :props="defaultProps">
+
+            </el-tree>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="MenuDialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="save">确 定</el-button>
             </div>
         </el-dialog>
@@ -146,10 +160,43 @@ export default {
             logoTextShow: true,
             headerBg: 'headerBg',
             dialogFormVisible: false,
-            MenuDialogFormVisible:false,
+            MenuDialogFormVisible: false,
             multipleSelection: [],
 
-        }
+            menuData: [
+                {
+                    id: 1,
+                    label: '主页',
+                    children: []
+                },
+                {
+                    id: 2,
+                    label: '系统管理',
+                    children: [{
+                        id:3,
+                        label:'用户管理',
+                        children: []
+                    },
+                        {
+                            id:4,
+                            label:'角色管理',
+                            children: []
+                        },
+                        {
+                            id:5,
+                            label:'菜单管理',
+                            children: []
+                        },
+                        {
+                            id:6,
+                            label:'文件管理',
+                            children: []
+                        },
+                    ]
+                },
+
+
+        ]}
     },
     created() {
         //
@@ -213,6 +260,13 @@ export default {
             this.dialogFormVisible = true
 
         },
+
+        //分配角色
+        AssignRoles(row) {
+            this.form = row
+            this.MenuDialogFormVisible = true
+
+        },
         //删除
         del(id) {
             this.request.delete("/role/" + id).then(res => {
@@ -240,10 +294,10 @@ export default {
             console.log(val)
             this.multipleSelection = val
         },
-        handleExcelImport(){
+        handleExcelImport() {
             this.$message.success("导入成功")//弹窗
             this.load()
-        }
+        },
     }
 }
 </script>
